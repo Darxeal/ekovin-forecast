@@ -63,11 +63,7 @@ lead_time_X = {t: merge(lead_time_gfs[t], station) for t in lead_times}
 def predict(variable, lead_time):
     model = CatBoostRegressor().load_model(f"models/{station_id}/{lead_time}/{variable.replace('/', '')}.cbm")
     X = lead_time_X[lead_time]
-    try:
-        pred = model.predict(X[model.feature_names_])
-    except KeyError:
-        st.cache_data.clear()
-        st.rerun()
+    pred = model.predict(X[model.feature_names_])
     return pred[0]
 
 target_variables = station.drop(columns=['latitude', 'longitude', 'station_index', 'datetime']).columns
